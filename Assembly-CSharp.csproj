@@ -61,11 +61,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\GlowControl.cs" />
+    <Compile Include="Assets\Scripts\ActionList.cs" />
     <Compile Include="Assets\Scripts\InputManager.cs" />
     <Compile Include="Assets\Scripts\NodeManager.cs" />
     <Compile Include="Assets\Scripts\ObjectInfo.cs" />
+    <Compile Include="Assets\Scripts\ResourceList.cs" />
     <Compile Include="Assets\Scripts\ResourceManager.cs" />
     <Compile Include="Assets\Scripts\TaskList.cs" />
+    <Compile Include="Assets\Scripts\Worker.cs" />
     <None Include="Assets\Low Poly Medieval Buildings\Read me.txt" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/Users/Kuba/Documents/Unity/RTS/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>

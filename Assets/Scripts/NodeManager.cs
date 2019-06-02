@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class NodeManager : MonoBehaviour
 {
-    public enum ResourceTypes {Stone}
-    public ResourceTypes resourceType;
+    public ResourceList resourceType;
 
-    public List<ObjectInfo> harvesters;
+    public List<Worker> harvesters;
 
     public float harvestTime;
     public float availableResource;
@@ -16,6 +15,7 @@ public class NodeManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        resourceType = ResourceList.STONE;
         StartCoroutine(ResourceTick());
     }
 
@@ -24,7 +24,7 @@ public class NodeManager : MonoBehaviour
     {
         if (availableResource <= 0)
         {
-            foreach(ObjectInfo harvester in harvesters)
+            foreach(Worker harvester in harvesters)
             {
                 harvester.isGathering = false;
                 harvester.ReturnResources();
