@@ -60,19 +60,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Medieval Buildings\Editor\ImageEffects\AntialiasingEditor.cs" />
-    <Compile Include="Assets\Medieval Buildings\Editor\ImageEffects\BloomAndFlaresEditor.cs" />
-    <Compile Include="Assets\Medieval Buildings\Editor\ImageEffects\BloomEditor.cs" />
-    <Compile Include="Assets\Medieval Buildings\Editor\ImageEffects\CameraMotionBlurEditor.cs" />
-    <Compile Include="Assets\Medieval Buildings\Editor\ImageEffects\ColorCorrectionCurvesEditor.cs" />
-    <Compile Include="Assets\Medieval Buildings\Editor\ImageEffects\ColorCorrectionLookupEditor.cs" />
-    <Compile Include="Assets\Medieval Buildings\Editor\ImageEffects\DepthOfFieldDeprecatedEditor.cs" />
-    <Compile Include="Assets\Medieval Buildings\Editor\ImageEffects\DepthOfFieldEditor.cs" />
-    <Compile Include="Assets\Medieval Buildings\Editor\ImageEffects\EdgeDetectionEditor.cs" />
-    <Compile Include="Assets\Medieval Buildings\Editor\ImageEffects\NoiseAndGrainEditor.cs" />
-    <Compile Include="Assets\Medieval Buildings\Editor\ImageEffects\SunShaftsEditor.cs" />
-    <Compile Include="Assets\Medieval Buildings\Editor\ImageEffects\TonemappingEditor.cs" />
-    <Compile Include="Assets\Medieval Buildings\Editor\ImageEffects\VignetteAndChromaticAberrationEditor.cs" />
+    <Compile Include="Assets\Resources\TEXTURE FLOW\Editor\GalleryEditor.cs" />
     <Reference Include="UnityEditor.TestRunner">
       <HintPath>C:/Users/Kuba/Documents/Unity/RTS/Library/ScriptAssemblies/UnityEditor.TestRunner.dll</HintPath>
     </Reference>

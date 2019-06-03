@@ -17,6 +17,10 @@ public class InputManager : MonoBehaviour
     private float maxHeight = 100f;
     private ObjectInfo selectedInfo;
 
+    private Vector2 boxStart;
+    private Vector2 boxEnd;
+    public Texture boxText;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -29,6 +33,20 @@ public class InputManager : MonoBehaviour
     {
         MoveCamera();
         RotateCamera();
+
+        if (Input.GetMouseButton(0) && boxStart == Vector2.zero)
+        {
+            boxStart = Input.mousePosition;
+        } else if (Input.GetMouseButton(0) && boxStart != Vector2.zero)
+        {
+            boxEnd = Input.mousePosition;
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            boxStart = Vector2.zero;
+            boxEnd = Vector2.zero;
+        }
 
         if (Input.GetMouseButton(0))
         {
@@ -49,10 +67,13 @@ public class InputManager : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, 100))
         {
-            Debug.Log("sup");
             if (hit.collider.tag == "Ground")
             {
-                selectedInfo.isSelected = false;
+                if (selectedInfo != null && selectedInfo.isSelected)
+                {
+                    selectedInfo.isSelected = false;
+
+                }
                 selectedObject = null;
                 Debug.Log("Deselected ");
             } else if (hit.collider.tag == "Selectable")
@@ -113,6 +134,18 @@ public class InputManager : MonoBehaviour
         if (destination != origin)
         {
             Camera.main.transform.eulerAngles = Vector3.MoveTowards(origin, destination, Time.deltaTime * rotateSpeed);
+        }
+    }
+
+    void OnGUI()
+    {
+        if (boxStart != Vector2.zero && boxEnd != Vector2.zero)
+        {
+            Debug.Log("ASD");
+            Debug.Log(boxStart);
+            Debug.Log(boxEnd);
+            GUI.DrawTexture(new Rect(boxStart.x, Screen.height - boxStart.y, boxEnd.x - boxStart.x, - boxEnd.y + boxStart.y), boxText);
+            //GUI.DrawTexture(new Rect(boxStart.x, Screen.height - boxStart.y, boxEnd.x - boxStart.x, boxStart.y - boxStart.y), boxText);
         }
     }
 }
