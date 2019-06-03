@@ -65,6 +65,7 @@
     <Compile Include="Assets\Scripts\InputManager.cs" />
     <Compile Include="Assets\Scripts\NodeManager.cs" />
     <Compile Include="Assets\Scripts\ObjectInfo.cs" />
+    <Compile Include="Assets\Scripts\RankList.cs" />
     <Compile Include="Assets\Scripts\ResourceList.cs" />
     <Compile Include="Assets\Scripts\ResourceManager.cs" />
     <Compile Include="Assets\Scripts\TaskList.cs" />

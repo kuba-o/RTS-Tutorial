@@ -52,6 +52,7 @@ public class InputManager : MonoBehaviour
             Debug.Log("sup");
             if (hit.collider.tag == "Ground")
             {
+                selectedInfo.isSelected = false;
                 selectedObject = null;
                 Debug.Log("Deselected ");
             } else if (hit.collider.tag == "Selectable")
