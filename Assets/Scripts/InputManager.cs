@@ -10,6 +10,8 @@ public class InputManager : MonoBehaviour
 
     public GameObject selectedObject;
 
+    private Rect selectBox;
+
     private float panDetect = 15f;
     private Quaternion rotation;
     private Vector3 position;
@@ -20,6 +22,8 @@ public class InputManager : MonoBehaviour
     private Vector2 boxStart;
     private Vector2 boxEnd;
     public Texture boxText;
+
+    private GameObject[] units;
 
     // Start is called before the first frame update
     void Start()
@@ -44,8 +48,10 @@ public class InputManager : MonoBehaviour
 
         if (Input.GetMouseButtonUp(0))
         {
-            boxStart = Vector2.zero;
-            boxEnd = Vector2.zero;
+            units = GameObject.FindGameObjectsWithTag("Selectable");
+            MultiSelect();  
+            //boxStart = Vector2.zero;
+            //boxEnd = Vector2.zero;
         }
 
         if (Input.GetMouseButton(0))
@@ -58,6 +64,26 @@ public class InputManager : MonoBehaviour
             Camera.main.transform.rotation = rotation;
             Camera.main.transform.position = position;
         }
+
+        selectBox = new Rect(boxStart.x, Screen.height - boxStart.y, boxEnd.x - boxStart.x, -boxEnd.y + boxStart.y);
+    }
+
+    public void MultiSelect()
+    {
+        foreach (GameObject unit in units)
+        {
+            if (unit.GetComponent<ObjectInfo>().isUnit)
+            {
+                Vector2 unitPos = Camera.main.WorldToScreenPoint(unit.transform.position);
+                if (selectBox.Contains(unitPos, true))
+                {
+                    unit.GetComponent<ObjectInfo>().isSelected = true;
+                }
+            }
+        }
+
+        boxStart = Vector2.zero;
+        boxEnd = Vector2.zero;
     }
 
     public void LeftClick()
@@ -144,8 +170,10 @@ public class InputManager : MonoBehaviour
             Debug.Log("ASD");
             Debug.Log(boxStart);
             Debug.Log(boxEnd);
-            GUI.DrawTexture(new Rect(boxStart.x, Screen.height - boxStart.y, boxEnd.x - boxStart.x, - boxEnd.y + boxStart.y), boxText);
+            GUI.DrawTexture(selectBox, boxText);
             //GUI.DrawTexture(new Rect(boxStart.x, Screen.height - boxStart.y, boxEnd.x - boxStart.x, boxStart.y - boxStart.y), boxText);
         }
     }
+
+    
 }

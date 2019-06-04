@@ -7,6 +7,10 @@ using UnityEngine.UI;
 public class ObjectInfo : MonoBehaviour
 {
     public GameObject iconCam;
+    public GameObject selectionIndicator;
+
+    public bool isUnit;
+
     public bool isSelected = false;
     public string objectName;
 
@@ -48,6 +52,11 @@ public class ObjectInfo : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (isSelected)
+        {
+            Debug.Log("A");
+        }
+        selectionIndicator.SetActive(isSelected);
         if (maxEnergy <= 0)
         {
             EB.gameObject.SetActive(false);
