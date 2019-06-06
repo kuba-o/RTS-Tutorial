@@ -115,35 +115,58 @@ public class InputManager : MonoBehaviour
 
     void MoveCamera()
     {
-        float moveX = Camera.main.transform.position.x;
-        float moveY = Camera.main.transform.position.y;
-        float moveZ = Camera.main.transform.position.z;
+        //float moveX = Camera.main.transform.position.x;
+        //float moveY = Camera.main.transform.position.y;
+        //float moveZ = Camera.main.transform.position.z;
+
+
+        float moveX = 0;
+        float moveY = 0;
+        float moveZ = 0;
 
         float xPos = Input.mousePosition.x;
         float yPos = Input.mousePosition.y;
 
         if (xPos > 0 && xPos < panDetect)
         {
-            moveX -= panSpeed;
+            //moveX -= panSpeed;
+            moveX = -panSpeed;
         }
         else if (xPos <= Screen.width && xPos >= Screen.width - panDetect)
         {
-            moveX += panSpeed;
+            //moveX += panSpeed;
+            moveX = panSpeed;
         }
 
         if (yPos <= Screen.height && yPos >= Screen.height - panDetect)
         {
-            moveZ += panSpeed;
+            //moveZ += panSpeed;
+            //moveX += Camera.main.transform.position.x;
+            moveZ = panSpeed;
         } else if (yPos >= 0 && yPos <= panDetect)
         {
-            moveZ -= panSpeed;
+            Debug.Log("ypos: " + yPos);
+            moveZ = -panSpeed;
+            //moveX -= Camera.main.transform.position.x;
+            //moveZ -= panSpeed;
         }
 
+        Debug.Log(Input.GetAxis("Mouse ScrollWheel"));
         moveY -= Input.GetAxis("Mouse ScrollWheel") * (panSpeed * 20);
-        moveY = Mathf.Clamp(moveY, minHeight, maxHeight);
+        //moveY = Mathf.Clamp(moveY, minHeight, maxHeight);
+        float y2 = Camera.main.transform.position.y;
 
         Vector3 newPos = new Vector3(moveX, moveY, moveZ);
-        Camera.main.transform.position = newPos;
+        //Vector3 newPos = new Vector3(moveX, moveY, moveZ);
+        Camera.main.transform.Translate(newPos * Time.deltaTime);
+        //Camera.main.gameObject.transform.position.z = moveZ;
+        float x2 = Camera.main.transform.position.x;
+
+        float z2 = Camera.main.transform.position.z;
+        //Camera.main.transform.position += new Vector3(0 , y2, z2 + moveZ * Time.deltaTime);
+        
+        //= moveZ;
+        //Camera.main.transform.position = newPos;
     }
 
     void RotateCamera()

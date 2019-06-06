@@ -52,6 +52,7 @@ public class ObjectInfo : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if (isSelected)
         {
             Debug.Log("A");
@@ -76,7 +77,7 @@ public class ObjectInfo : MonoBehaviour
 
         healthDisplay.text = "HP: " + health;
         energyDisplay.text = "EP: " + energy;
-        patkDisplay.text = "PATK: " + patk;
+        //patkDisplay.text = "PATK: " + patk;
         pdefDisplay.text = "PDEF: " + pdef;
         eatkDisplay.text = "EATK: " + eatk;
         edefDisplay.text = "EDEF: " + edef;
