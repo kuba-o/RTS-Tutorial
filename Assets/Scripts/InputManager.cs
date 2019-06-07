@@ -133,7 +133,6 @@ public class InputManager : MonoBehaviour
             moveZ = panSpeed;
         } else if (yPos >= 0 && yPos <= panDetect)
         {
-            Debug.Log("ypos: " + yPos);
             moveZ = -panSpeed;
         }
 
@@ -172,11 +171,7 @@ public class InputManager : MonoBehaviour
     {
         if (boxStart != Vector2.zero && boxEnd != Vector2.zero)
         {
-            Debug.Log("ASD");
-            Debug.Log(boxStart);
-            Debug.Log(boxEnd);
             GUI.DrawTexture(selectBox, boxText);
-            //GUI.DrawTexture(new Rect(boxStart.x, Screen.height - boxStart.y, boxEnd.x - boxStart.x, boxStart.y - boxStart.y), boxText);
         }
     }
 }
