@@ -25,14 +25,12 @@ public class InputManager : MonoBehaviour
 
     private GameObject[] units;
 
-    // Start is called before the first frame update
     void Start()
     {
         rotation = Camera.main.transform.rotation;
         position = Camera.main.transform.position;
     }
 
-    // Update is called once per frame
     void Update()
     {
         MoveCamera();
@@ -50,8 +48,6 @@ public class InputManager : MonoBehaviour
         {
             units = GameObject.FindGameObjectsWithTag("Selectable");
             MultiSelect();  
-            //boxStart = Vector2.zero;
-            //boxEnd = Vector2.zero;
         }
 
         if (Input.GetMouseButton(0))
@@ -115,11 +111,6 @@ public class InputManager : MonoBehaviour
 
     void MoveCamera()
     {
-        //float moveX = Camera.main.transform.position.x;
-        //float moveY = Camera.main.transform.position.y;
-        //float moveZ = Camera.main.transform.position.z;
-
-
         float moveX = 0;
         float moveY = 0;
         float moveZ = 0;
@@ -129,44 +120,35 @@ public class InputManager : MonoBehaviour
 
         if (xPos > 0 && xPos < panDetect)
         {
-            //moveX -= panSpeed;
             moveX = -panSpeed;
         }
         else if (xPos <= Screen.width && xPos >= Screen.width - panDetect)
         {
-            //moveX += panSpeed;
             moveX = panSpeed;
         }
 
         if (yPos <= Screen.height && yPos >= Screen.height - panDetect)
         {
-            //moveZ += panSpeed;
-            //moveX += Camera.main.transform.position.x;
+
             moveZ = panSpeed;
         } else if (yPos >= 0 && yPos <= panDetect)
         {
             Debug.Log("ypos: " + yPos);
             moveZ = -panSpeed;
-            //moveX -= Camera.main.transform.position.x;
-            //moveZ -= panSpeed;
         }
 
-        Debug.Log(Input.GetAxis("Mouse ScrollWheel"));
-        moveY -= Input.GetAxis("Mouse ScrollWheel") * (panSpeed * 20);
-        //moveY = Mathf.Clamp(moveY, minHeight, maxHeight);
         float y2 = Camera.main.transform.position.y;
-
         Vector3 newPos = new Vector3(moveX, moveY, moveZ);
-        //Vector3 newPos = new Vector3(moveX, moveY, moveZ);
         Camera.main.transform.Translate(newPos * Time.deltaTime);
-        //Camera.main.gameObject.transform.position.z = moveZ;
-        float x2 = Camera.main.transform.position.x;
+        Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, y2, Camera.main.transform.position.z);
 
-        float z2 = Camera.main.transform.position.z;
-        //Camera.main.transform.position += new Vector3(0 , y2, z2 + moveZ * Time.deltaTime);
-        
-        //= moveZ;
-        //Camera.main.transform.position = newPos;
+        if (Input.GetAxis("Mouse ScrollWheel") < 0)
+        {
+            Camera.main.transform.position += new Vector3(0, 15, 0) * Time.deltaTime;
+        } else if (Input.GetAxis("Mouse ScrollWheel") > 0)
+        {
+            Camera.main.transform.position -= new Vector3(0, 15, 0) * Time.deltaTime;
+        }
     }
 
     void RotateCamera()
@@ -197,6 +179,4 @@ public class InputManager : MonoBehaviour
             //GUI.DrawTexture(new Rect(boxStart.x, Screen.height - boxStart.y, boxEnd.x - boxStart.x, boxStart.y - boxStart.y), boxText);
         }
     }
-
-    
 }

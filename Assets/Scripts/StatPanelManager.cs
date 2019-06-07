@@ -17,7 +17,11 @@ public class StatPanelManager : MonoBehaviour
     void Update()
     {
         primary = GameObject.FindGameObjectWithTag("Player").GetComponent<InputManager>().selectedObject;
+        if (primary != null)
+        {
+            patk.text = "PATK: " + primary.GetComponent<ObjectInfo>().health;
+
+        }
         //patkDisplay.text = "PATK: " + patk;
-        patk.text = "PATK: " + primary.GetComponent<ObjectInfo>().health;
     }
 }
