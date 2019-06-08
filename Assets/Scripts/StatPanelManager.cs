@@ -21,7 +21,8 @@ public class StatPanelManager : MonoBehaviour
     Camera iconCam;
     CanvasGroup InfoPanel;
 
-    public ObjectInfo primary;
+    public ObjectInfo objectInfo;
+    public GameObject primary;
 
     void Start()
     {
@@ -43,39 +44,36 @@ public class StatPanelManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        GameObject selectedTmp = GameObject.FindGameObjectWithTag("Player").GetComponent<InputManager>().selectedObject;
+        primary = GameObject.FindGameObjectWithTag("Player").GetComponent<InputManager>().primary;
 
-        if (selectedTmp != null)
+        if (primary != null)
         {
-            primary = selectedTmp.GetComponent<ObjectInfo>(); 
-        } else
-        {
-            primary = null;
+            objectInfo = primary.GetComponent<ObjectInfo>(); 
         }
 
         if (primary != null)
         {
-            if (primary.maxEnergy <= 0)
+            if (objectInfo.maxEnergy <= 0)
             {
                 EB.gameObject.SetActive(false);
             }
 
-            unitName.text = primary.GetComponent<ObjectInfo>().objectName;
-            health.text = "HP: " + primary.GetComponent<ObjectInfo>().health;
-            energy.text = "EP: " + primary.GetComponent<ObjectInfo>().energy;
+            unitName.text = objectInfo.GetComponent<ObjectInfo>().objectName;
+            health.text = "HP: " + objectInfo.GetComponent<ObjectInfo>().health;
+            energy.text = "EP: " + objectInfo.GetComponent<ObjectInfo>().energy;
 
-            HB.maxValue = primary.maxHealth;
-            HB.value = primary.health;
-            EB.maxValue = primary.maxEnergy;
-            EB.value = primary.energy;
+            HB.maxValue = objectInfo.maxHealth;
+            HB.value = objectInfo.health;
+            EB.maxValue = objectInfo.maxEnergy;
+            EB.value = objectInfo.energy;
 
 
-            patk.text = "PATK: " + primary.GetComponent<ObjectInfo>().patk;
-            pdef.text = "PDEF: " + primary.GetComponent<ObjectInfo>().pdef;
-            eatk.text = "PDEF: " + primary.GetComponent<ObjectInfo>().eatk;
-            edef.text = "EDEF: " + primary.GetComponent<ObjectInfo>().edef;
-            rank.text = "Rank: " + primary.GetComponent<ObjectInfo>().rank;
-            kills.text = "Kills: " + primary.GetComponent<ObjectInfo>().kills;
+            patk.text = "PATK: " + objectInfo.GetComponent<ObjectInfo>().patk;
+            pdef.text = "PDEF: " + objectInfo.GetComponent<ObjectInfo>().pdef;
+            eatk.text = "PDEF: " + objectInfo.GetComponent<ObjectInfo>().eatk;
+            edef.text = "EDEF: " + objectInfo.GetComponent<ObjectInfo>().edef;
+            rank.text = "Rank: " + objectInfo.GetComponent<ObjectInfo>().rank;
+            kills.text = "Kills: " + objectInfo.GetComponent<ObjectInfo>().kills;
             iconCam.enabled = true;
 
 

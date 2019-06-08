@@ -20,6 +20,7 @@ public class Worker : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        resourceManager = GameObject.FindGameObjectWithTag("Player").GetComponent<ResourceManager>();
         task = TaskList.Idle;
         actionList = GetComponent<ActionList>();
         agent = GetComponent<NavMeshAgent>();

@@ -10,6 +10,7 @@ public class ObjectInfo : MonoBehaviour
     public GameObject selectionIndicator;
 
     public bool isUnit;
+    public bool isPrimary = false;
 
     public bool isSelected = false;
     public string objectName;
@@ -30,11 +31,13 @@ public class ObjectInfo : MonoBehaviour
 
     void Start()
     {
-
+        iconCam.SetActive(false);
     }
 
     void Update()
     {
+
+        selectionIndicator.SetActive(isSelected);
 
         if (health <= 0)
         {

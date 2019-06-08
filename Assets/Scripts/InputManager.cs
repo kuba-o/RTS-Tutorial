@@ -8,8 +8,6 @@ public class InputManager : MonoBehaviour
     public float rotateSpeed;
     public float rotateAmount;
 
-    public GameObject selectedObject;
-
     private Rect selectBox;
 
     private float panDetect = 15f;
@@ -17,22 +15,30 @@ public class InputManager : MonoBehaviour
     private Vector3 position;
     private float minHeight = 10f;
     private float maxHeight = 100f;
-    private ObjectInfo selectedInfo;
+    public ObjectInfo selectedInfo;
 
     private Vector2 boxStart;
     private Vector2 boxEnd;
     public Texture boxText;
 
-    private GameObject[] units;
+
+    public GameObject primary;
+    public GameObject[] units;
 
     void Start()
     {
+        primary = null;
         rotation = Camera.main.transform.rotation;
         position = Camera.main.transform.position;
     }
 
     void Update()
     {
+        if (primary != null)
+        {
+            selectedInfo = primary.GetComponent<ObjectInfo>();
+        }
+
         MoveCamera();
         RotateCamera();
 
@@ -50,7 +56,7 @@ public class InputManager : MonoBehaviour
             MultiSelect();  
         }
 
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButtonDown(0))
         {
             LeftClick();
         }
@@ -73,6 +79,13 @@ public class InputManager : MonoBehaviour
                 Vector2 unitPos = Camera.main.WorldToScreenPoint(unit.transform.position);
                 if (selectBox.Contains(unitPos, true))
                 {
+                    if (primary == null)
+                    {
+                        unit.GetComponent<ObjectInfo>().isPrimary = true;
+                        unit.GetComponent<ObjectInfo>().iconCam.SetActive(true);
+                        primary = unit;
+
+                    }
                     unit.GetComponent<ObjectInfo>().isSelected = true;
                 }
             }
@@ -91,19 +104,26 @@ public class InputManager : MonoBehaviour
         {
             if (hit.collider.tag == "Ground")
             {
-                if (selectedInfo != null && selectedInfo.isSelected)
+                if (selectedInfo != null)
                 {
+                    selectedInfo.isPrimary = false;
                     selectedInfo.isSelected = false;
+                    selectedInfo.iconCam.SetActive(false);
+                    Debug.Log("Deselected " + primary.GetComponent<ObjectInfo>().objectName);
 
                 }
-                selectedObject = null;
-                Debug.Log("Deselected ");
+
+                primary = null;
+                selectedInfo = null;
+                
             } else if (hit.collider.tag == "Selectable")
             {
-                selectedObject = hit.collider.gameObject;
-                selectedInfo = selectedObject.GetComponent<ObjectInfo>();
+                primary = hit.collider.gameObject;
+                selectedInfo = primary.GetComponent<ObjectInfo>();
                 selectedInfo.isSelected = true;
-                Debug.Log("selected " + selectedInfo.objectName);
+                selectedInfo.iconCam.SetActive(true);
+                selectedInfo.isPrimary = true;
+                Debug.Log("selected " + primary.GetComponent<ObjectInfo>().objectName);
             }
 
         }
