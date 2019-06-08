@@ -116,10 +116,14 @@ public class Worker : MonoBehaviour
 
         if (hitObject.tag == "Resource" && task == TaskList.Gathering)
         {
+            GetComponent<NavMeshAgent>().enabled = false;
+            GetComponent<NavMeshObstacle>().enabled = true;
+
 
             hitObject.GetComponent<NodeManager>().gatherers++;
             resourceType = hitObject.GetComponent<NodeManager>().resourceType;
             isGathering = true;
+
         }
         else if (hitObject.tag == "Drops" && task == TaskList.Delivering)
         {
@@ -164,6 +168,8 @@ public class Worker : MonoBehaviour
 
     public void ReturnResources()
     {
+        GetComponent<NavMeshObstacle>().enabled = false;
+        GetComponent<NavMeshAgent>().enabled = true;
         drops = GameObject.FindGameObjectsWithTag("Drops");
         agent.destination = GetClosestDropOff(drops).transform.position;
         //drop off point

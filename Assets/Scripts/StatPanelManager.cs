@@ -74,7 +74,8 @@ public class StatPanelManager : MonoBehaviour
             edef.text = "EDEF: " + objectInfo.GetComponent<ObjectInfo>().edef;
             rank.text = "Rank: " + objectInfo.GetComponent<ObjectInfo>().rank;
             kills.text = "Kills: " + objectInfo.GetComponent<ObjectInfo>().kills;
-            iconCam.enabled = true;
+            primary.GetComponentInChildren<Camera>().enabled = true;
+            //iconCam.enabled = true;
 
 
             InfoPanel.alpha = 1;
@@ -88,7 +89,8 @@ public class StatPanelManager : MonoBehaviour
             InfoPanel.alpha = 0;
             InfoPanel.blocksRaycasts = false;
             InfoPanel.interactable = false;
-            iconCam.enabled = false;
+            //primary.GetComponent<Camera>().enabled = false;
+            //iconCam.enabled = false;
         }
     }
 }
