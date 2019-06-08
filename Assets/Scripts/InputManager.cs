@@ -183,10 +183,18 @@ public class InputManager : MonoBehaviour
             }
         }
 
+
+
         float y2 = Camera.main.transform.position.y;
         Vector3 newPos = new Vector3(moveX, moveY, moveZ);
+        Vector3 initPos = Camera.main.transform.position;
         Camera.main.transform.Translate(newPos * Time.deltaTime);
         Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, y2, Camera.main.transform.position.z);
+        Vector3 pos = Camera.main.transform.position;
+        if (pos.x > maxRight || pos.x <- maxLeft || pos.z > maxForward || pos.z <- maxBackward)
+        {
+            Camera.main.transform.position = initPos;
+        }
 
         float rise = 15;
         if (Input.GetAxis("Mouse ScrollWheel") < 0)
