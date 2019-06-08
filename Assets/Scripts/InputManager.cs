@@ -13,8 +13,12 @@ public class InputManager : MonoBehaviour
     private float panDetect = 15f;
     private Quaternion rotation;
     private Vector3 position;
-    private float minHeight = 10f;
-    private float maxHeight = 100f;
+    public float minHeight;
+    public float maxHeight;
+    public float maxRight;
+    public float maxLeft;
+    public float maxForward;
+    public float maxBackward;
     public ObjectInfo selectedInfo;
 
     private Vector2 boxStart;
@@ -140,20 +144,43 @@ public class InputManager : MonoBehaviour
 
         if (xPos > 0 && xPos < panDetect)
         {
-            moveX = -panSpeed;
+            if (Camera.main.transform.position.x >= -maxLeft)
+            {
+                moveX = -panSpeed;
+            } else
+            {
+                moveX = 0;
+            }
         }
         else if (xPos <= Screen.width && xPos >= Screen.width - panDetect)
         {
-            moveX = panSpeed;
+            if (Camera.main.transform.position.x <= maxRight)
+            {
+                moveX = panSpeed;
+            } else
+            {
+                moveX = 0;
+            }
         }
 
         if (yPos <= Screen.height && yPos >= Screen.height - panDetect)
         {
-
-            moveZ = panSpeed;
+            if (Camera.main.transform.position.z <= maxForward)
+            {
+                moveZ = panSpeed;
+            } else
+            {
+                moveZ = 0;
+            }
         } else if (yPos >= 0 && yPos <= panDetect)
         {
-            moveZ = -panSpeed;
+            if (Camera.main.transform.position.z >= -maxBackward)
+            {
+                moveZ = -panSpeed;
+            } else
+            {
+                moveZ = 0;
+            }
         }
 
         float y2 = Camera.main.transform.position.y;
@@ -161,12 +188,23 @@ public class InputManager : MonoBehaviour
         Camera.main.transform.Translate(newPos * Time.deltaTime);
         Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, y2, Camera.main.transform.position.z);
 
+        float rise = 15;
         if (Input.GetAxis("Mouse ScrollWheel") < 0)
         {
-            Camera.main.transform.position += new Vector3(0, 15, 0) * Time.deltaTime;
+            if (Camera.main.transform.position.y >= maxHeight)
+            {
+                rise = 0;
+            }
+
+
+            Camera.main.transform.position += new Vector3(0, rise, 0) * Time.deltaTime;
         } else if (Input.GetAxis("Mouse ScrollWheel") > 0)
         {
-            Camera.main.transform.position -= new Vector3(0, 15, 0) * Time.deltaTime;
+            if (Camera.main.transform.position.y <= minHeight)
+            {
+                rise = 0;
+            }
+            Camera.main.transform.position -= new Vector3(0, rise, 0) * Time.deltaTime;
         }
     }
 
