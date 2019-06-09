@@ -29,15 +29,22 @@ public class InputManager : MonoBehaviour
     public GameObject primary;
     public GameObject[] units;
 
+    private float altitude;
+    private float oldAltitude;
+
     void Start()
     {
         primary = null;
         rotation = Camera.main.transform.rotation;
         position = Camera.main.transform.position;
+        oldAltitude = Terrain.activeTerrain.SampleHeight(Camera.main.transform.position);
     }
 
     void Update()
     {
+
+        
+
         if (primary != null)
         {
             selectedInfo = primary.GetComponent<ObjectInfo>();
@@ -45,6 +52,20 @@ public class InputManager : MonoBehaviour
 
         MoveCamera();
         RotateCamera();
+        altitude = Terrain.activeTerrain.SampleHeight(Camera.main.transform.position);
+
+        if (altitude > oldAltitude)
+        {
+            Camera.main.transform.position += new Vector3(0, altitude - oldAltitude, 0);
+            oldAltitude = altitude;
+
+        }
+        else if (altitude < oldAltitude)
+        {
+            Camera.main.transform.position -= new Vector3(0, oldAltitude - altitude, 0);
+            oldAltitude = altitude;
+
+        }
 
         if (Input.GetMouseButton(0) && boxStart == Vector2.zero)
         {
