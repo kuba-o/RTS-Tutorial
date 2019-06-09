@@ -12,30 +12,49 @@ public class Worker : MonoBehaviour
     public ResourceManager resourceManager;
     public bool isGathering = false;
     private NavMeshAgent agent;
+    private NavMeshObstacle obstacle;
     public int heldResource;
     public int maxHeldResource;
     public GameObject[] drops;
-    public float velocity;
+    public float harvestingDistance;
+    public float distanceToTarget;
 
-    // Start is called before the first frame update
     void Start()
     {
         resourceManager = GameObject.FindGameObjectWithTag("Player").GetComponent<ResourceManager>();
         task = TaskList.Idle;
         actionList = GetComponent<ActionList>();
         agent = GetComponent<NavMeshAgent>();
+        obstacle = GetComponent<NavMeshObstacle>();
         StartCoroutine(GatherTick());
     }
 
-    // Update is called once per frame
     void Update()
     {
-        velocity = agent.velocity.magnitude / agent.speed;
+        if (task == TaskList.Gathering)
+        {
+            distanceToTarget = Vector3.Distance(transform.position, targetNode.transform.position);
+            if (distanceToTarget <= harvestingDistance)
+            {
+                Harvest();
+            }
+        }
+
+        if (task == TaskList.Delivering)
+        {
+            distanceToTarget = Vector3.Distance(GetClosestDropOff(drops).transform.position, transform.position);
+            if (distanceToTarget <= 7f)
+            {
+                StoreResources();
+            }
+        }
+
+        
         if (targetNode == null)
         {
             if (heldResource != 0)
             {
-                ReturnResources();
+                StartCoroutine(ReturnResources());
             }
             else
             {
@@ -43,9 +62,9 @@ public class Worker : MonoBehaviour
             }
         }
 
-        if (heldResource >= maxHeldResource && (task == TaskList.Gathering || task == TaskList.Delivering))
+        if (heldResource >= maxHeldResource && (task == TaskList.Gathering || task == TaskList.Harvesting))
         {
-            ReturnResources();
+            StartCoroutine(ReturnResources());
         }
 
         if (Input.GetMouseButtonDown(1) && GetComponent<ObjectInfo>().isSelected)
@@ -90,66 +109,42 @@ public class Worker : MonoBehaviour
         {
             if (hit.collider.tag == "Ground")
             {
-                actionList.Move(ref agent, ref hit, ref task);
-                //agent.destination = hit.point;
-                //Debug.Log("Walking");
-                //task = TaskList.Moving;
-
-
+                actionList.Move(ref agent, ref obstacle, ref hit, ref task);
             }
             else if (hit.collider.tag == "Resource")
             {
                 actionList.Harvest(ref agent, ref hit, ref task, ref targetNode);
-                /*
-                agent.destination = hit.collider.gameObject.transform.position;
-                Debug.Log("harvesting");
-                task = TaskList.Gathering;
-                targetNode = hit.collider.gameObject;
-                */
+            } else if (hit.collider.tag == "Drops")
+            {
+                StartCoroutine(ReturnResources());
             }
         }
     }
 
-    public void OnTriggerEnter(Collider other)
+    public void Harvest()
     {
-        GameObject hitObject = other.gameObject;
-
-        if (hitObject.tag == "Resource" && task == TaskList.Gathering)
-        {
-            GetComponent<NavMeshAgent>().enabled = false;
-            GetComponent<NavMeshObstacle>().enabled = true;
-
-
-            hitObject.GetComponent<NodeManager>().gatherers++;
-            resourceType = hitObject.GetComponent<NodeManager>().resourceType;
-            isGathering = true;
-
-        }
-        else if (hitObject.tag == "Drops" && task == TaskList.Delivering)
-        {
-            if (resourceManager.stone >= resourceManager.maxStone)
-            {
-                task = TaskList.Idle;
-
-            }
-            else
-            {
-                resourceManager.stone += heldResource;
-                heldResource = 0;
-                task = TaskList.Gathering;
-                agent.destination = targetNode.transform.position;
-            }
-        }
+        isGathering = true;
+        targetNode.GetComponent<NodeManager>().gatherers++;
+        resourceType = targetNode.GetComponent<NodeManager>().resourceType;
+        agent.destination = agent.transform.position;
+        agent.enabled = false;
+        obstacle.enabled = true;
+        task = TaskList.Harvesting;
     }
 
-    public void OnTriggerExit(Collider other)
+    public void StoreResources()
     {
-        GameObject hitObject = other.gameObject;
-
-        if (hitObject.tag == "Resource")
+        if (resourceManager.stone >= resourceManager.maxStone)
         {
-            hitObject.GetComponent<NodeManager>().gatherers--;
-            isGathering = false;
+            task = TaskList.Idle;
+
+        }
+        else
+        {
+            resourceManager.stone += heldResource;
+            heldResource = 0;
+            task = TaskList.Gathering;
+            agent.destination = targetNode.transform.position;
         }
     }
 
@@ -166,13 +161,27 @@ public class Worker : MonoBehaviour
         }
     }
 
-    public void ReturnResources()
+    public IEnumerator ReturnResources()
     {
-        GetComponent<NavMeshObstacle>().enabled = false;
-        GetComponent<NavMeshAgent>().enabled = true;
-        drops = GameObject.FindGameObjectsWithTag("Drops");
-        agent.destination = GetClosestDropOff(drops).transform.position;
-        //drop off point
-        task = TaskList.Delivering;
+        bool returnResourcesRoutineShouldFire = true;
+        if (returnResourcesRoutineShouldFire)
+        {
+            if (obstacle.enabled)
+            {
+                obstacle.enabled = false;
+                yield return true;
+            }
+
+            Debug.Log("ASD");
+            isGathering = false;
+            targetNode.GetComponent<NodeManager>().gatherers--;
+            agent.enabled = true;
+            drops = GameObject.FindGameObjectsWithTag("Drops");
+
+            agent.SetDestination(GetClosestDropOff(drops).transform.position);
+            task = TaskList.Delivering;
+            yield break;
+        }
+
     }
 }

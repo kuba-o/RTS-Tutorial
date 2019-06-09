@@ -27,6 +27,7 @@ public class NodeManager : MonoBehaviour
             foreach(Worker harvester in harvesters)
             {
                 harvester.isGathering = false;
+                StartCoroutine(harvester.ReturnResources());
                 harvester.ReturnResources();
             }
             Destroy(gameObject);
